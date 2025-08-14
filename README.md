@@ -8,7 +8,7 @@ It is made as an effort to engrave C better in my (i.e repo owner's) brain.
 
 If you wish to help develop this piece of software, I suggest you let me (you-know-who) know via email. I (think u got it) rarely check on github for any news.
 
-There's no code yet because I (yes, yes) started this out as a local project, but after deleting it twice, have started moving it over. Please be patient.
+This has been developed in the past as a local project, but after deleting it twice, has been moved to github and being redone.
 
 Thank you for reading. There will be no releases, as this is as simple to compile as "tcc main.c" as of now.
 
