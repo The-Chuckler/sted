@@ -14,17 +14,41 @@ int main(){
 
 	// Program startup
 
-	int errcode = 0;
-	char function = 0;
-	char helpmsg[] = "You'll figure it out. q to quit.\n";
+	// These store your current position in the file:
+	long unsigned int xpos,ypos = 0;
 
-	//Main loop
+	// Error code. Will be 1 if no errors. Not std, sorry
+	int errcode = 0;
+
+	// Command to be run, only way of input
+	char function = 0;
+
+	// What is displayed when 'h' is pressed.
+	char helpmsg[] = "Command list: q to quit\n";
+
+	// Current string. Temp implementation.
+	char currstr[20];
+
+	// File pointer, idk how this works but ig 'tis std
+	FILE * urfile;
+
+	// File loading. TODO: take name from cmdargs.
+	urfile = fopen("test.txt", "r");
+
+	// Empty file prevention:
+	if (urfile == NULL) return 2;
+
+	// Put first string of file in RAM:
+	fgets(currstr, 20, urfile);
+	// Main loop
 
 	while (!errcode){
 
 		// Show file from RAM
-		printf("\nFile contents here\n");
+		printf("\n%s\n",currstr);
 
+		// Tell user the cursor position
+		printf("Cursor at %ld x, %ld y.\n",xpos,ypos);
 		// Ask for input
 		printf("Command: ");
 		scanf(" %c", &function);
@@ -43,6 +67,28 @@ int main(){
 			insmode();
 			break;
 			}
+
+		// Navigating the document:
+		case 'u' : {
+			if (!ypos) break;
+			ypos--;
+			break;
+		}
+		case 'd' : { //TODO: find doc ylen; limit dis.
+			ypos++;
+			break;
+		}
+		case 'l' : {
+			if (!xpos) break;
+			xpos--;
+			break;
+		}
+		case 'r' : { //TODO: check curr line xlen b4 ++
+			xpos++;
+			break;
+		}
+
+		// Default option, if command is invalid:
 		default : {
 			printf("Unknown command %c.\n",function);
 			break;
@@ -50,15 +96,22 @@ int main(){
 		}
 	}
 
-	//Cleanup code
+	// Cleanup code
 
+	// Closing and saving the file:
+	fclose(urfile);
+
+	// Stop execution
 	return errcode;
 
 }
 
-	//Extra functions called from the main loop:
+	// Extra functions called from the main loop:
 
 void insmode(){
-	printf("You\'re using insert mode.\n");
+	char stdinchars[20];
+	printf("You\'re using insert mode. 20 chars max.\n");
+	scanf("%s",stdinchars);
+	printf("Found chars:%s\n",stdinchars);
 	return;
 }
