@@ -2,8 +2,7 @@
 
 	// Declarations
 
-void insmode(char str4ed[25]);
-		/* ^ File insertion mode.
+void insmode(); /* File insertion mode.
 		 * How to use:
 		 * Append 'i' to the start
 		 * of the string u wanna add
@@ -28,7 +27,7 @@ int main(){
 	char helpmsg[] = "Command list: q to quit\n";
 
 	// Current string. Temp implementation.
-	char currstr[25];
+	char currstr[20];
 
 	// File pointer, idk how this works but ig 'tis std
 	FILE * urfile;
@@ -37,10 +36,10 @@ int main(){
 	urfile = fopen("test.txt", "r");
 
 	// Empty file prevention:
-	if (urfile == NULL) return 1;
+	if (urfile == NULL) return 2;
 
 	// Put first string of file in RAM:
-	fgets(currstr, 25, urfile);
+	fgets(currstr, 20, urfile);
 	// Main loop
 
 	while (!errcode){
@@ -48,7 +47,7 @@ int main(){
 		// Show file from RAM
 		printf("\n%s\n",currstr);
 
-		// Tell user the cursor position
+; 		// Tell user the cursor position
 		printf("Cursor at %ld x, %ld y.\n",xpos,ypos);
 		// Ask for input
 		printf("Command: ");
@@ -65,7 +64,7 @@ int main(){
 			break;
 			}
 		case 'i' : {
-			insmode(currstr);
+			insmode();
 			break;
 			}
 
@@ -102,7 +101,7 @@ int main(){
 	// Closing and saving the file:
 	fclose(urfile);
 
-	// Making sure normal execution is 0 as it should
+	// Workaround to save exec speed in main loop:
 	if (errcode == 1) return 0;
 
 	// Stop execution
@@ -112,29 +111,10 @@ int main(){
 
 	// Extra functions called from the main loop:
 
-void insmode(char str4ed[25]){
-
-	// RAM init:
+void insmode(){
 	char stdinchars[20];
-
-	// Wait for input: TODO: put hard char limit
 	printf("You\'re using insert mode. 20 chars max.\n");
 	scanf("%s",stdinchars);
-
-	// Echo saved stdin (debug)
 	printf("Found chars:%s\n",stdinchars);
-
-	/* Place inserted chars at end of string
-	 * Hardcoded, temporary.		*/
-	char y = 0;
-	for(char  i = 19; i < 25; i++){
-	str4ed[i] = stdinchars[y];
-	y++;
-	}
-
-	// Make sure string has a terminator
-	str4ed[25] = '\0';
-
-	// Go back to main loop.
 	return;
 }
