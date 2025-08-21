@@ -2,7 +2,7 @@
 
 	// Declarations
 
-void insmode(char str4ed[25]);
+void insmode(unsigned int currxpos,unsigned int currypos,char str4ed[25]);
 		/* ^ File insertion mode.
 		 * How to use:
 		 * Append 'i' to the start
@@ -65,7 +65,7 @@ int main(){
 			break;
 			}
 		case 'i' : {
-			insmode(currstr);
+			insmode(xpos,ypos,currstr);
 			break;
 			}
 
@@ -112,28 +112,55 @@ int main(){
 
 	// Extra functions called from the main loop:
 
-void insmode(char str4ed[25]){
+void insmode(unsigned int currxpos, unsigned int currypos, char str4ed[25]){
 
 	// RAM init:
-	char stdinchars[20];
+	char streamedinchars[20];
 
 	// Wait for input: TODO: put hard char limit
 	printf("You\'re using insert mode. 20 chars max.\n");
-	scanf("%s",stdinchars);
+
+	// Okay, so, i am BAFFLED this is also a standard
+	// C thing, but to limit how many letters are read,
+	// between the % sign and vartype id, you tell it
+	// the length you wanna read. Minus one.
+	// Ex.: %50s can read 51 chars of a string. ..weird.
+	// BUG/INTENDED STANDARD C FUNCTIONALITY:
+	// This will not absorb what comes next in iostream
+	// So anything over 20 chars gets interpreted
+	// as input. I do not know how to fix this,
+	// please help!
+	scanf("%19s",streamedinchars);
 
 	// Echo saved stdin (debug)
-	printf("Found chars:%s\n",stdinchars);
+	printf("Found chars:%s\n",streamedinchars);
 
-	/* Place inserted chars at end of string
-	 * Hardcoded, temporary.		*/
-	char y = 0;
-	for(char  i = 19; i < 25; i++){
-	str4ed[i] = stdinchars[y];
-	y++;
+	// Remember how many letters were entered
+	// this is how we figure out the length of the transfer
+	char insstrlen = 0;
+	while(streamedinchars[insstrlen] != '\0'){
+		insstrlen++;
+	}
+
+	// This starts adding the chars we inputted
+	// starting from our xpos in the string.
+	// Currently overwrites text there (replace mode)
+	// TODO: add insert mode (push back existing data)
+	char z = 0; unsigned int i = currxpos;
+	while(i < currxpos + insstrlen){
+		str4ed[i] = streamedinchars[z];
+		i++;
+		z++;
 	}
 
 	// Make sure string has a terminator
-	str4ed[25] = '\0';
+	// Bug: This allows it to go into unallocated
+	// memory and still work fine, but it is not
+	// in fact, fine.
+	// Fix: add length check BEFORE concatenating strs.
+	if (insstrlen + currxpos >= 25){
+		str4ed[i] = '\0';
+	}
 
 	// Go back to main loop.
 	return;
